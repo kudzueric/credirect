@@ -1,0 +1,9 @@
+<?php
+// app/Controller/RedirectorController.php
+// this class does the redirection work
+// use Apache to redirect to here
+class RedirectorController extends AppController {
+	public function r() {
+
+	}
+}

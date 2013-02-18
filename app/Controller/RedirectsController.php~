@@ -1,0 +1,61 @@
+<?php
+
+class RedirectsController extends AppController {
+	public $helpers = array('Html', 'Form', 'Session');
+	public $components = array('Session');
+
+	public function index() {
+		$this->set('redirects', $this->Redirect->find('all'));
+	}
+
+	public function view($id = null) {
+		if(!$id) {
+			throw new NotFoundException(__('No redirect'));
+		}
+
+		$redirect = $this->Redirect->findById($id);
+		if(!$redirect) {
+			throw new NotFoundException(__('Invalid redirect id'));
+		}
+
+		$this->set('redirect', $redirect);
+	}
+
+	public function add() {
+		if ($this->request->is('post')) {
+			$this->Redirect->create();
+			if ($this->Redirect->save($this->request->data)) {
+				$this->Session->setFlash('Your redirect has been saved.');
+                		$this->redirect(array('action' => 'index'));
+			} else {
+				$this->Session->setFlash('Unable to add your redirect.');
+			}
+
+		}
+	}
+
+	public function edit($id = null) {
+	    if (!$id) {
+		throw new NotFoundException(__('Invalid redirect'));
+	    }
+
+	    $redirect = $this->Redirect->findById($id);
+	    if (!$redirect) {
+		throw new NotFoundException(__('Invalid redirect'));
+	    }
+
+	    if ($this->request->is('redirect') || $this->request->is('put')) {
+		$this->Redirect->id = $id;
+		if ($this->Redirect->save($this->request->data)) {
+		    $this->Session->setFlash('Your redirect has been updated.');
+		    $this->redirect(array('action' => 'index'));
+		} else {
+		    $this->Session->setFlash('Unable to update your redirect.');
+		}
+	    }
+
+	    if (!$this->request->data) {
+		$this->request->data = $redirect;
+	    }
+}
+}

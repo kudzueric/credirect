@@ -1,0 +1,31 @@
+<?php
+// app/Controller/RedirectorController.php
+// this class does the redirection work
+// use Apache to redirect to here
+class RedirectorController extends AppController {
+	public $uses = array('Redirect');
+	public $helpers = array('Html');
+	private $base_url = 'http://www.kudzudigitalcoaching.com/';
+
+	public function index() {
+		$this->redirect($this->base_url, 404 , true);
+	}
+	public function q($path) {
+		if (! $path) {
+			$this->set('link',$base_url);
+		}  else {
+			$redirects =  $this->Redirect->find('first', array( 'conditions' => array ('name' => $path)));
+			if (! $redirects) {
+				$this->Redirect->index();
+				exit();
+			}
+			$this->set('link', $redirects['Redirect']['name'] );
+		}
+				
+
+	}
+
+	public function beforeFilter() {
+		$this->Auth->allow('q', 'index');
+	}
+}

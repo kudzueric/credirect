@@ -29,9 +29,9 @@
 /**
  * ...and connect the rest of 'Pages' controller's urls.
  */
-	//Router::connect('/users', array('controller' => 'users' ));
+	Router::connect('/users', array('controller' => 'users', 'action' => 'index' ));
 	Router::connect('/users/:action/*', array('controller' => 'users' ));
-	//Router::connect('/redirects', array('controller' => 'redirects', 'action' => 'index'));
+	Router::connect('/redirects', array('controller' => 'redirects', 'action' => 'index'));
 	Router::connect('/redirects/:action/*', array('controller' => 'redirects' ));
 
 	Router::connect('/*', array('controller' => 'redirects', 'action' => 'r'));

@@ -33,10 +33,10 @@ App::uses('Controller', 'Controller');
  */
 class AppController extends Controller {
 	protected function url ($redirect = null) {
-		$url = "http://www.marionstcheese.com/";
+		$url = "http://www.MarionStreetCheeseMarket.com/";
 	
 		if (!$redirect) {
-			$url = $url . "?utm_source=" . 'none' . "&utum_medium=" . 'none' . "&utm_campaign=" . 'none';
+			$url = $url . "?utm_source=" . 'none' . "&utm_medium=" . 'none' . "&utm_campaign=" . 'none';
 		} else {
 			$url = $url . $redirect['Redirect']['destination'].  "?utm_source=" . $redirect['Redirect']['source'] . "&utm_medium=" . $redirect['Redirect']['medium'] . "&utm_campaign=" . $redirect['Redirect']['campaign'];
 		}

@@ -7,4 +7,6 @@
 .DS_Store
 /tags
 *~
-database.php`
+
+app/Config/database.php
+app/Config/core.php

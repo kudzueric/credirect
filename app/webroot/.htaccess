@@ -1,5 +1,11 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
+	
+	## rewrite subdomains to path
+	RewriteCond %{HTTP_HOST} (.+)\.marionstcheese\.com$ [OR]
+	RewriteCond %{HTTP_HOST} www\.(.+)\.marionstcheese\.com$
+	RewriteRule ^ http://marionstcheese.com/%1 [L,R=301]
+	
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^(.*)$ index.php [QSA,L]

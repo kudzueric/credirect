@@ -9,6 +9,7 @@ class RedirectsController extends AppController {
 			$this->set('redirects', $this->Redirect->find('all'));
 		} else {
 			$this->set('redirects', $this->Redirect->findAllByCampaign($filter));
+			$this->set('filtered', True); 
 		}
 	}
 

@@ -1,16 +1,21 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
 	
+    ## protect admin urls by IP in addition to PW
+	#RewriteCond %{REQUEST_URI} ^/(users|redirects)(/?|/.*)
+	RewriteCond %{REMOTE_ADDR} !^(173\.15\.103\.97)$ 
+	RewriteCond %{REMOTE_ADDR} !^(67\.174\.11\.151)$
+	RewriteRule ^(users|redirects)(/?|/.*) - [F]
+
+	RewriteCond %{HTTPS} !^on
+	RewriteCond %{REQUEST_URI} ^/(users|redirects)
+	RewriteRule ^(.*)$ https://marionstcheese.com/$1 [L,R=302]
+	
 	## rewrite subdomains to path
 	RewriteCond %{HTTP_HOST} (.+)\.marionstcheese\.com$ [OR]
 	RewriteCond %{HTTP_HOST} www\.(.+)\.marionstcheese\.com$
-	RewriteRule ^ http://marionstcheese.com/%1 [L,R=301]
-	
-    ## protect admin urls by IP in addition to PW
-	RewriteCond %{REQUEST_URI} ^/(users|redirects)(/?|/.*)
-	RewriteCond %{REMOTE_ADDR} !^(173\.15\.103\.97)$
-	RewriteRule ^ - [F]
-	
+	RewriteRule ^ http://marionstcheese.com/%1 [L,R=302]
+	#RewriteRule  ^$ %1 [DP]
 	
 	RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f

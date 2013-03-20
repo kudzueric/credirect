@@ -8,6 +8,7 @@
     <th>Campaign</th>
 	<th>Source</th>
 	<th>Medium</th>
+	<th>Host</th>
 	<th>Destination</th>
 	<th>Actions</th>
         <th>Created</th>
@@ -24,6 +25,7 @@ array('controller' => 'redirects', 'action' => 'view', $redirect['Redirect']['re
 	<td><?php echo $redirect['Redirect']['campaign']; ?></td>
 	<td><?php echo $redirect['Redirect']['source']; ?></td>
 	<td><?php echo $redirect['Redirect']['medium']; ?></td>
+	<td><?php echo $redirect['Redirect']['host']; ?></td>
 	<td><?php echo $redirect['Redirect']['destination']; ?></td>
 	<td>
 		<?php echo $this->Html->link('Edit', array('action' => 'edit', $redirect['Redirect']['id'])); ?> &nbsp;

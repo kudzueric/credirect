@@ -23,7 +23,7 @@ class RedirectsController extends AppController {
 		}
 		
 		$url = $this->url($redirect);
-		$this->set('url', $url);
+		$this->set('url', $url );
 	}
 	
 	public function add() {
@@ -84,7 +84,7 @@ class RedirectsController extends AppController {
 
 		$redirect = $this->Redirect->findByRedirectKey($id);
 		if(!$redirect) {
-			$this->redirect($this->url());
+			$this->redirect($this->url(), array(status => '302'));
 		}
 
 		$this->redirect($this->url($redirect));

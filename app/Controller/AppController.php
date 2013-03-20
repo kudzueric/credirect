@@ -38,7 +38,11 @@ class AppController extends Controller {
 		if (!$redirect) {
 			$url = $url . "?utm_source=" . 'none' . "&utm_medium=" . 'none' . "&utm_campaign=" . 'none';
 		} else {
-			$url = $url . $redirect['Redirect']['destination'].  "?utm_source=" . $redirect['Redirect']['source'] . "&utm_medium=" . $redirect['Redirect']['medium'] . "&utm_campaign=" . $redirect['Redirect']['campaign'];
+			if ($redirect['Redirect']['host'] == null) {
+				$url = $url . $redirect['Redirect']['destination'].  "?utm_source=" . $redirect['Redirect']['source'] . "&utm_medium=" . $redirect['Redirect']['medium'] . "&utm_campaign=" . $redirect['Redirect']['campaign'];
+			} else {
+				$url = 'http://' . $redirect['Redirect']['host'] .'/' . $redirect['Redirect']['destination'].  "?utm_source=" . $redirect['Redirect']['source'] . "&utm_medium=" . $redirect['Redirect']['medium'] . "&utm_campaign=" . $redirect['Redirect']['campaign'];
+			}
 		}
 		
 		return $url;

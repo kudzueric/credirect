@@ -6,6 +6,7 @@ echo $this->Form->input('redirect_key');
 echo $this->Form->input('campaign');
 echo $this->Form->input('medium');
 echo $this->Form->input('source');
+echo $this->Form->input('host');
 echo $this->Form->input('destination');
 echo $this->Form->end('Update');
 ?>

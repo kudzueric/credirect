@@ -5,6 +5,6 @@ class Redirect extends AppModel {
 		'name' => array ( 'rule' => 'notEmpty'),
 		'campaign' => array ( 'rule' => 'notEmpty'),
 		'source' => array ( 'rule' => 'notEmpty'),
-		'medium' => array ( 'rule' => 'notEmpty') 
+		'medium' => array ( 'rule' => 'notEmpty')
 		);
 }

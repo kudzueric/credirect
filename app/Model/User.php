@@ -8,13 +8,31 @@ class User extends AppModel {
             'required' => array(
                 'rule' => array('notEmpty'),
                 'message' => 'A username is required'
-            )
+            ),
+			'alphanumeric' => array(
+				'rule' => 'alphanumeric',
+				'required' => true,
+				'message' => 'Letters and numbers only'
+			),
+			'between' => array(
+				'rule' => array('between', 5, 15),
+				'message' => 'Must be between 5 and 15 characters'
+			),
+			'unique' => array(
+				'rule' => 'isUnique',
+				'message' => 'This username is already in use'
+			)
+			
         ),
         'password' => array(
             'required' => array(
                 'rule' => array('notEmpty'),
                 'message' => 'A password is required'
-            )
+            ),
+			'between' => array(
+				'rule' => array('between', 8, 100),
+				'message' => 'Must be at least 8 characters'
+			)
         ),
         'role' => array(
             'valid' => array(

@@ -19,8 +19,7 @@
     <tr>
         <td><?php echo $redirect['Redirect']['id']; ?></td>
         <td>
-            <?php echo $this->Html->link($redirect['Redirect']['redirect_key'],
-array('controller' => 'redirects', 'action' => 'view', $redirect['Redirect']['redirect_key'])); ?>
+            <?php echo $this->Html->link($redirect['Redirect']['redirect_key'], array('controller' => 'redirects', 'action' => 'view', $redirect['Redirect']['redirect_key'])); ?>
         </td>
 	<td><?php if ($filtered) : ?> <?php echo $redirect['Redirect']['campaign']; ?>
 	<?php else : ?>
@@ -39,5 +38,9 @@ array('controller' => 'redirects', 'action' => 'view', $redirect['Redirect']['re
     <?php endforeach; ?>
     <?php unset($redirect); ?>
 </table>
-<?php echo $this->Html->link('Add Redirect', array('controller' => 'redirects', 'action' => 'add')); ?><br/>
-<?php if ($filtered) echo $this->Html->link('All Redirects', array('controller' => 'redirects', 'action' => 'index')); ?>
+<div class="actions"><ul>
+	<li><?php echo $this->Html->link('Add Redirect', array('controller' => 'redirects', 'action' => 'add') , array('class' => 'actions')); ?></li>
+<?php if ($filtered) : ?><li>
+	<?php echo $this->Html->link('All Redirects', array('controller' => 'redirects', 'action' => 'index'), array('class' => 'actions')); ?>
+</li><?php endif; ?>
+	</ul></div>

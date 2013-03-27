@@ -26,4 +26,4 @@
     <?php endforeach; ?>
     <?php unset($user); ?>
 </table>
-<?php echo $this->Html->link('Add User', array('controller' => 'users', 'action' => 'add')); ?>
+<?php echo $this->Html->link('Add User', array('controller' => 'users', 'action' => 'add'), array('class' => 'actions')); ?>

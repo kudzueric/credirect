@@ -7,6 +7,7 @@ class RedirectsController extends AppController {
 	public function index($filter = null) {
 		if (!$filter) {
 			$this->set('redirects', $this->Redirect->find('all'));
+			$this->set('filtered', False); 
 		} else {
 			$this->set('redirects', $this->Redirect->findAllByCampaign($filter));
 			$this->set('filtered', True); 
@@ -15,16 +16,19 @@ class RedirectsController extends AppController {
 
 	public function view($id = null) {
 		if(!$id) {
-			$url = $this->url();
+			$this->Session->setFlash('Not found.');
+			$this->redirect(array('action' => 'index'));
 		}
 
 		$redirect = $this->Redirect->findByRedirectKey($id);
 		if(!$redirect) {
-			$url = $this->url();
+			$this->Session->setFlash('Not found.');
+			$this->redirect(array('action' => 'index'));
 		}
-		
-		$url = $this->url($redirect);
-		$this->set('url', $url );
+		$this->set('redirect', $redirect);
+
+		$this->set('url', $this->url($redirect) );
+		$this->set('tracking', $this->trackingUrl($redirect));
 	}
 	
 	public function add() {

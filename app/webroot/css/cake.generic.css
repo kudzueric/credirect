@@ -48,18 +48,19 @@ h1, h2, h3, h4 {
 h1 {
 	background:#fff;
 	color: #003d4c;
-	font-size: 100%;
+	font-size: 160%;
+	text-align: center;
 }
 h2 {
 	background:#fff;
 	color: #e32;
 	font-family:'Gill Sans','lucida grande', helvetica, arial, sans-serif;
-	font-size: 190%;
+	font-size: 130%;
 }
 h3 {
 	color: #2c6877;
 	font-family:'Gill Sans','lucida grande', helvetica, arial, sans-serif;
-	font-size: 165%;
+	font-size: 115%;
 }
 h4 {
 	color: #993;
@@ -80,19 +81,22 @@ p {
 #header{
 	padding: 10px 20px;
 }
-#header h1 {
+#header .appname {
+	display: block;
+	text-align: center;
+	font-size: 140%;
 	line-height:20px;
 	background: #003d4c url('../img/cake.icon.png') no-repeat left;
 	color: #fff;
 	padding: 0px 30px;
 }
-#header h1 a {
+#header .appname a {
 	color: #fff;
 	background: #003d4c;
 	font-weight: normal;
 	text-decoration: none;
 }
-#header h1 a:hover {
+#header .appname a:hover {
 	color: #fff;
 	background: #003d4c;
 	text-decoration: underline;

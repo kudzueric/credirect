@@ -48,6 +48,19 @@ class AppController extends Controller {
 		return $url;
 	}
 	
+	protected function trackingUrl ($redirect = null) {
+		$domain = "MarionStCheese.com";
+		
+		if (!$redirect) {
+			$domain = "http://" . $domain; 
+		} else {
+			$domain = "http://" . $redirect['Redirect']['redirect_key'] . "." . $domain;
+		}
+		
+		return $domain;
+	
+	}
+	
 	public $components = array(
 		'Session',
 		'Auth' => array(

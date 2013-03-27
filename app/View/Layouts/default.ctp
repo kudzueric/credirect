@@ -34,7 +34,7 @@
 <body>
 	<div id="container">
 		<div id="header">
-			<h1>URL Tracking tool by Kudzu Digital Consutling, LLC</h1>
+			<span class="appname"><a href="/redirects/">URL Tracking tool</a> by Kudzu Digital Consutling, LLC</span>
 		</div>
 		<div id="content">
 
@@ -44,7 +44,7 @@
 		</div>
 		<div id="footer">
 			<?php echo $this->Html->link(
-					$this->Html->image('http://www.kudzudigitalcoaching.com/sites/default/files/logo.jpg', array('alt' => 'Kudzu Digital Coaching', 'border' => '0')),
+					$this->Html->image('/img/kdc-logo.jpg', array('alt' => 'Kudzu Digital Coaching', 'border' => '0')),
 					'http://www.kudzudigitalcoaching.com/',
 					array('target' => '_blank', 'escape' => false)
 				);

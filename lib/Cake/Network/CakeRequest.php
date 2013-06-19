@@ -5,16 +5,18 @@
  * PHP 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @since         CakePHP(tm) v 2.0
- * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 App::uses('Hash', 'Utility');
 
 /**
@@ -133,7 +135,7 @@ class CakeRequest implements ArrayAccess {
 		if (empty($url)) {
 			$url = $this->_url();
 		}
-		if ($url[0] == '/') {
+		if ($url[0] === '/') {
 			$url = substr($url, 1);
 		}
 		$this->url = $url;
@@ -254,7 +256,7 @@ class CakeRequest implements ArrayAccess {
 		if (strpos($uri, '?') !== false) {
 			list($uri) = explode('?', $uri, 2);
 		}
-		if (empty($uri) || $uri == '/' || $uri == '//' || $uri == '/index.php') {
+		if (empty($uri) || $uri === '/' || $uri === '//' || $uri === '/index.php') {
 			return '/';
 		}
 		return $uri;
@@ -291,7 +293,7 @@ class CakeRequest implements ArrayAccess {
 			if ($base === DS || $base === '.') {
 				$base = '';
 			}
-
+			$base = implode('/', array_map('rawurlencode', explode('/', $base)));
 			$this->webroot = $base . '/';
 			return $this->base = $base;
 		}
@@ -305,7 +307,7 @@ class CakeRequest implements ArrayAccess {
 		$this->webroot = $base . '/';
 
 		$docRoot = env('DOCUMENT_ROOT');
-		$docRootContainsWebroot = strpos($docRoot, $dir . '/' . $webroot);
+		$docRootContainsWebroot = strpos($docRoot, $dir . DS . $webroot);
 
 		if (!empty($base) || !$docRootContainsWebroot) {
 			if (strpos($this->webroot, '/' . $dir . '/') === false) {
@@ -411,7 +413,7 @@ class CakeRequest implements ArrayAccess {
 		if (!empty($ref) && !empty($base)) {
 			if ($local && strpos($ref, $base) === 0) {
 				$ref = substr($ref, strlen($base));
-				if ($ref[0] != '/') {
+				if ($ref[0] !== '/') {
 					$ref = '/' . $ref;
 				}
 				return $ref;
@@ -579,10 +581,10 @@ class CakeRequest implements ArrayAccess {
 	}
 
 /**
- * Get the value of the current requests url. Will include named parameters and querystring arguments.
+ * Get the value of the current requests URL. Will include named parameters and querystring arguments.
  *
  * @param boolean $base Include the base path, set to false to trim the base path off.
- * @return string the current request url including query string args.
+ * @return string the current request URL including query string args.
  */
 	public function here($base = true) {
 		$url = $this->here;
@@ -892,10 +894,10 @@ class CakeRequest implements ArrayAccess {
 		if (isset($this->params[$name])) {
 			return $this->params[$name];
 		}
-		if ($name == 'url') {
+		if ($name === 'url') {
 			return $this->query;
 		}
-		if ($name == 'data') {
+		if ($name === 'data') {
 			return $this->data;
 		}
 		return null;

@@ -61,11 +61,11 @@ class DATABASE_CONFIG {
 
 	public $default = array(
 		'datasource' => 'Database/Mysql',
-		'persistent' => false,
+		'persistent' => true,
 		'host' => 'localhost',
 		'login' => 'cake1',
-		'password' => 'cake1',
-		'database' => 'cake1',
+		'password' => 'cake1pass.',
+		'database' => 'campaignredirect',
 		'prefix' => '',
 		//'encoding' => 'utf8',
 	);

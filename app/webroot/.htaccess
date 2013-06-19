@@ -3,9 +3,9 @@
 	
     ## protect admin urls by IP in addition to PW
 	#RewriteCond %{REQUEST_URI} ^/(users|redirects)(/?|/.*)
-	RewriteCond %{REMOTE_ADDR} !^(173\.15\.103\.97)$ 
-	RewriteCond %{REMOTE_ADDR} !^(67\.174\.11\.151)$
-	RewriteRule ^(users|redirects)(/?|/.*) - [F]
+	#RewriteCond %{REMOTE_ADDR} !^(173\.15\.103\.97)$ 
+	#RewriteCond %{REMOTE_ADDR} !^(67\.174\.11\.151)$
+	#RewriteRule ^(users|redirects)(/?|/.*) - [F]
 
 	RewriteCond %{HTTPS} !^on
 	RewriteCond %{REQUEST_URI} ^/(users|redirects)

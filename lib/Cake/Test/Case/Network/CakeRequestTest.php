@@ -5,22 +5,28 @@
  * PHP 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       Cake.Test.Case.Network
  * @since         CakePHP(tm) v 2.0
- * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
 App::uses('Dispatcher', 'Routing');
 App::uses('Xml', 'Utility');
 App::uses('CakeRequest', 'Network');
 
+/**
+ * Class TestCakeRequest
+ *
+ * @package       Cake.Test.Case.Network
+ */
 class TestCakeRequest extends CakeRequest {
 
 	public function reConstruct($url = 'some/path', $parseEnvironment = true) {
@@ -28,7 +34,7 @@ class TestCakeRequest extends CakeRequest {
 		if (empty($url)) {
 			$url = $this->_url();
 		}
-		if ($url[0] == '/') {
+		if ($url[0] === '/') {
 			$url = substr($url, 1);
 		}
 		$this->url = $url;
@@ -1098,6 +1104,15 @@ class CakeRequestTest extends CakeTestCase {
  */
 	public function testBaseUrlAndWebrootWithModRewrite() {
 		Configure::write('App.baseUrl', false);
+
+		$_SERVER['DOCUMENT_ROOT'] = '/cake/repo/branches';
+		$_SERVER['PHP_SELF'] = '/urlencode me/app/webroot/index.php';
+		$_SERVER['PATH_INFO'] = '/posts/view/1';
+
+		$request = new CakeRequest();
+		$this->assertEquals('/urlencode%20me', $request->base);
+		$this->assertEquals('/urlencode%20me/', $request->webroot);
+		$this->assertEquals('posts/view/1', $request->url);
 
 		$_SERVER['DOCUMENT_ROOT'] = '/cake/repo/branches';
 		$_SERVER['PHP_SELF'] = '/1.2.x.x/app/webroot/index.php';

@@ -7,17 +7,19 @@
  * PHP 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       Cake.Controller
  * @since         Cake v 0.10.0.1076
- * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 App::uses('Scaffold', 'View');
 
 /**
@@ -226,7 +228,7 @@ class Scaffold {
 		}
 
 		if ($this->controller->beforeScaffold($action)) {
-			if ($action == 'edit') {
+			if ($action === 'edit') {
 				if (isset($request->params['pass'][0])) {
 					$this->ScaffoldModel->id = $request['pass'][0];
 				}
@@ -236,7 +238,7 @@ class Scaffold {
 			}
 
 			if (!empty($request->data)) {
-				if ($action == 'create') {
+				if ($action === 'create') {
 					$this->ScaffoldModel->create();
 				}
 
@@ -442,7 +444,7 @@ class Scaffold {
 				$associations[$type][$assocKey]['controller'] =
 					Inflector::pluralize(Inflector::underscore($model));
 
-				if ($type == 'hasAndBelongsToMany') {
+				if ($type === 'hasAndBelongsToMany') {
 					$associations[$type][$assocKey]['with'] = $assocData['with'];
 				}
 			}

@@ -5,16 +5,17 @@
  * PHP 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       Cake.Model.Datasource
  * @since         CakePHP(tm) v 0.10.0.1076
- * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
 App::uses('DataSource', 'Model/Datasource');
@@ -322,9 +323,9 @@ class DboSource extends DataSource {
 				$data, array_fill(0, count($data), $column)
 			);
 		} elseif (is_object($data) && isset($data->type, $data->value)) {
-			if ($data->type == 'identifier') {
+			if ($data->type === 'identifier') {
 				return $this->name($data->value);
-			} elseif ($data->type == 'expression') {
+			} elseif ($data->type === 'expression') {
 				return $data->value;
 			}
 		} elseif (in_array($data, array('{$__cakeID__$}', '{$__cakeForeignKey__$}'), true)) {
@@ -640,7 +641,6 @@ class DboSource extends DataSource {
  * Returns an array of all result rows for a given SQL query.
  * Returns false if no rows matched.
  *
- *
  * ### Options
  *
  * - `cache` - Returns the cached version of the query, if exists and stores the result in cache.
@@ -651,7 +651,7 @@ class DboSource extends DataSource {
  * @param string $sql SQL statement
  * @param array $params parameters to be bound as values for the SQL statement
  * @param array $options additional options for the query.
- * @return array Array of resultset rows, or false if no rows matched
+ * @return boolean|array Array of resultset rows, or false if no rows matched
  */
 	public function fetchAll($sql, $params = array(), $options = array()) {
 		if (is_string($options)) {
@@ -898,7 +898,7 @@ class DboSource extends DataSource {
 		if (empty($log['log'])) {
 			return;
 		}
-		if (PHP_SAPI != 'cli') {
+		if (PHP_SAPI !== 'cli') {
 			$controller = null;
 			$View = new View($controller, false);
 			$View->set('logs', array($this->configKeyName => $log));
@@ -1528,7 +1528,6 @@ class DboSource extends DataSource {
 		if (empty($assocData['offset']) && !empty($assocData['page'])) {
 			$assocData['offset'] = ($assocData['page'] - 1) * $assocData['limit'];
 		}
-		$assocData['limit'] = $this->limit($assocData['limit'], $assocData['offset']);
 
 		switch ($type) {
 			case 'hasOne':
@@ -1554,7 +1553,6 @@ class DboSource extends DataSource {
 						'alias' => $association,
 						'group' => null
 					));
-					$query += array('order' => $assocData['order'], 'limit' => $assocData['limit']);
 				} else {
 					$join = array(
 						'table' => $linkModel,
@@ -1585,6 +1583,7 @@ class DboSource extends DataSource {
 					'alias' => $association,
 					'order' => $assocData['order'],
 					'limit' => $assocData['limit'],
+					'offset' => $assocData['offset'],
 					'group' => null
 				);
 			break;
@@ -1612,6 +1611,7 @@ class DboSource extends DataSource {
 				$query = array(
 					'conditions' => $assocData['conditions'],
 					'limit' => $assocData['limit'],
+					'offset' => $assocData['offset'],
 					'table' => $this->fullTableName($linkModel),
 					'alias' => $association,
 					'fields' => array_merge($this->fields($linkModel, $association, $assocData['fields']), $joinFields),
@@ -1691,9 +1691,8 @@ class DboSource extends DataSource {
 		if (!empty($data['conditions'])) {
 			$data['conditions'] = trim($this->conditions($data['conditions'], true, false));
 		}
-		if (!empty($data['table'])) {
-			$schema = !(is_string($data['table']) && strpos($data['table'], '(') === 0);
-			$data['table'] = $this->fullTableName($data['table'], true, $schema);
+		if (!empty($data['table']) && (!is_string($data['table']) || strpos($data['table'], '(') !== 0)) {
+			$data['table'] = $this->fullTableName($data['table']);
 		}
 		return $this->renderJoinStatement($data);
 	}
@@ -1878,7 +1877,7 @@ class DboSource extends DataSource {
 
 			if ($quoteValues) {
 				$update .= $this->value($value, $model->getColumnType($field));
-			} elseif ($model->getColumnType($field) == 'boolean' && (is_int($value) || is_bool($value))) {
+			} elseif ($model->getColumnType($field) === 'boolean' && (is_int($value) || is_bool($value))) {
 				$update .= $this->boolean($value, true);
 			} elseif (!$alias) {
 				$update .= str_replace($quotedAlias . '.', '', str_replace(
@@ -2588,7 +2587,7 @@ class DboSource extends DataSource {
 		}
 
 		if (!preg_match($operatorMatch, trim($operator))) {
-			$operator .= ' =';
+			$operator .= is_array($value) ? ' IN' : ' =';
 		}
 		$operator = trim($operator);
 
@@ -2672,16 +2671,13 @@ class DboSource extends DataSource {
  */
 	public function limit($limit, $offset = null) {
 		if ($limit) {
-			$rt = '';
-			if (!strpos(strtolower($limit), 'limit')) {
-				$rt = ' LIMIT';
-			}
+			$rt = ' LIMIT';
 
 			if ($offset) {
-				$rt .= ' ' . $offset . ',';
+				$rt .= sprintf(' %u,', $offset);
 			}
 
-			$rt .= ' ' . $limit;
+			$rt .= sprintf(' %u', $limit);
 			return $rt;
 		}
 		return null;
@@ -2942,7 +2938,7 @@ class DboSource extends DataSource {
  * This method should be implemented by datasources that require sequences to be used.
  *
  * @param string $table The name of the table to update.
- * @param string $column The column to use when reseting the sequence value.
+ * @param string $column The column to use when resetting the sequence value.
  * @return boolean|void success.
  */
 	public function resetSequence($table, $column) {
@@ -2955,7 +2951,7 @@ class DboSource extends DataSource {
  * @return array Fields in table. Keys are column and unique
  */
 	public function index($model) {
-		return false;
+		return array();
 	}
 
 /**
@@ -3170,8 +3166,6 @@ class DboSource extends DataSource {
 			} else {
 				if (!empty($value['unique'])) {
 					$out .= 'UNIQUE ';
-				} elseif (!empty($value['type']) && strtoupper($value['type']) === 'FULLTEXT') {
-					$out .= 'FULLTEXT ';
 				}
 				$name = $this->startQuote . $name . $this->endQuote;
 			}

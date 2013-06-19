@@ -9,6 +9,7 @@
             'options' => array('admin' => 'Admin', 'author' => 'Author')
         ));
 	echo $this->Form->input('id', array('type' => 'hidden'));
+	echo $this->Form->input('username', array('type' => 'hidden'));
     ?>
     </fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>

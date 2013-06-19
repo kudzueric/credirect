@@ -1,4 +1,6 @@
 /app/tmp
+database.php
+core.php
 /lib/Cake/Console/Templates/skel/tmp/
 /plugins
 /vendors
@@ -8,5 +10,3 @@
 /tags
 *~
 
-app/Config/database.php
-app/Config/core.php

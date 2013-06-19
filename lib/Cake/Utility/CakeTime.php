@@ -5,16 +5,17 @@
  * PHP 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       Cake.Utility
  * @since         CakePHP(tm) v 0.10.0.1076
- * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
 App::uses('Multibyte', 'I18n');
@@ -164,7 +165,7 @@ class CakeTime {
 				break;
 			case 'c':
 				$format = __dc('cake', 'd_t_fmt', 5);
-				if ($format != 'd_t_fmt') {
+				if ($format !== 'd_t_fmt') {
 					return self::convertSpecifiers($format, self::$_time);
 				}
 				break;
@@ -205,12 +206,12 @@ class CakeTime {
 				$format = __dc('cake', 'am_pm', 5);
 				if (is_array($format)) {
 					$meridiem = $format[$meridiem];
-					return ($specifier[1] == 'P') ? strtolower($meridiem) : strtoupper($meridiem);
+					return ($specifier[1] === 'P') ? strtolower($meridiem) : strtoupper($meridiem);
 				}
 				break;
 			case 'r':
 				$complete = __dc('cake', 't_fmt_ampm', 5);
-				if ($complete != 't_fmt_ampm') {
+				if ($complete !== 't_fmt_ampm') {
 					return str_replace('%p', self::_translateSpecifier(array('%p', 'p')), $complete);
 				}
 				break;
@@ -224,13 +225,13 @@ class CakeTime {
 				return ($weekDay = date('w', self::$_time)) ? $weekDay : 7;
 			case 'x':
 				$format = __dc('cake', 'd_fmt', 5);
-				if ($format != 'd_fmt') {
+				if ($format !== 'd_fmt') {
 					return self::convertSpecifiers($format, self::$_time);
 				}
 				break;
 			case 'X':
 				$format = __dc('cake', 't_fmt', 5);
-				if ($format != 't_fmt') {
+				if ($format !== 't_fmt') {
 					return self::convertSpecifiers($format, self::$_time);
 				}
 				break;
@@ -318,10 +319,15 @@ class CakeTime {
 
 		if (is_int($dateString) || is_numeric($dateString)) {
 			$date = intval($dateString);
-		} elseif (is_object($dateString) && $dateString instanceof DateTime) {
+		} elseif (
+			$dateString instanceof DateTime &&
+			$dateString->getTimezone()->getName() != date_default_timezone_get()
+		) {
 			$clone = clone $dateString;
 			$clone->setTimezone(new DateTimeZone(date_default_timezone_get()));
 			$date = (int)$clone->format('U') + $clone->getOffset();
+		} elseif ($dateString instanceof DateTime) {
+			$date = (int)$dateString->format('U');
 		} else {
 			$date = strtotime($dateString);
 		}
@@ -462,7 +468,8 @@ class CakeTime {
  */
 	public static function isToday($dateString, $timezone = null) {
 		$timestamp = self::fromString($dateString, $timezone);
-		return date('Y-m-d', $timestamp) == date('Y-m-d', time());
+		$now = self::fromString('now', $timezone);
+		return date('Y-m-d', $timestamp) == date('Y-m-d', $now);
 	}
 
 /**
@@ -475,7 +482,8 @@ class CakeTime {
  */
 	public static function isThisWeek($dateString, $timezone = null) {
 		$timestamp = self::fromString($dateString, $timezone);
-		return date('W o', $timestamp) == date('W o', time());
+		$now = self::fromString('now', $timezone);
+		return date('W o', $timestamp) == date('W o', $now);
 	}
 
 /**
@@ -488,7 +496,8 @@ class CakeTime {
  */
 	public static function isThisMonth($dateString, $timezone = null) {
 		$timestamp = self::fromString($dateString, $timezone);
-		return date('m Y', $timestamp) == date('m Y', time());
+		$now = self::fromString('now', $timezone);
+		return date('m Y', $timestamp) == date('m Y', $now);
 	}
 
 /**
@@ -501,7 +510,8 @@ class CakeTime {
  */
 	public static function isThisYear($dateString, $timezone = null) {
 		$timestamp = self::fromString($dateString, $timezone);
-		return date('Y', $timestamp) == date('Y', time());
+		$now = self::fromString('now', $timezone);
+		return date('Y', $timestamp) == date('Y', $now);
 	}
 
 /**
@@ -515,7 +525,8 @@ class CakeTime {
  */
 	public static function wasYesterday($dateString, $timezone = null) {
 		$timestamp = self::fromString($dateString, $timezone);
-		return date('Y-m-d', $timestamp) == date('Y-m-d', strtotime('yesterday'));
+		$yesterday = self::fromString('yesterday', $timezone);
+		return date('Y-m-d', $timestamp) == date('Y-m-d', $yesterday);
 	}
 
 /**
@@ -528,7 +539,8 @@ class CakeTime {
  */
 	public static function isTomorrow($dateString, $timezone = null) {
 		$timestamp = self::fromString($dateString, $timezone);
-		return date('Y-m-d', $timestamp) == date('Y-m-d', strtotime('tomorrow'));
+		$tomorrow = self::fromString('tomorrow', $timezone);
+		return date('Y-m-d', $timestamp) == date('Y-m-d', $tomorrow);
 	}
 
 /**
@@ -874,8 +886,9 @@ class CakeTime {
 
 		$date = self::fromString($dateString, $timezone);
 		$interval = self::fromString('-' . $timeInterval);
+		$now = self::fromString('now', $timezone);
 
-		return $date >= $interval && $date <= time();
+		return $date >= $interval && $date <= $now;
 	}
 
 /**
@@ -896,8 +909,9 @@ class CakeTime {
 
 		$date = self::fromString($dateString, $timezone);
 		$interval = self::fromString('+' . $timeInterval);
+		$now = self::fromString('now', $timezone);
 
-		return $date <= $interval && $date >= time();
+		return $date <= $interval && $date >= $now;
 	}
 
 /**

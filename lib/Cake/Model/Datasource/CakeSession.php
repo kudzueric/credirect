@@ -10,16 +10,17 @@
  * PHP 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       Cake.Model.Datasource
  * @since         CakePHP(tm) v .0.10.0.1222
- * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
 App::uses('Hash', 'Utility');
@@ -249,7 +250,6 @@ class CakeSession {
 			self::_overwrite($_SESSION, Hash::remove($_SESSION, $name));
 			return !self::check($name);
 		}
-		self::_setError(2, __d('cake_dev', "%s doesn't exist", $name));
 		return false;
 	}
 
@@ -369,7 +369,6 @@ class CakeSession {
 		if (isset($result)) {
 			return $result;
 		}
-		self::_setError(2, "$name doesn't exist");
 		return null;
 	}
 
@@ -427,7 +426,7 @@ class CakeSession {
 	}
 
 /**
- * Clears the session, the session id, and renew's the session.
+ * Clears the session, the session id, and renews the session.
  *
  * @return void
  */
